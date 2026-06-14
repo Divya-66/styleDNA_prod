@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StyleDNA | Personalized Fashion Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="logo">
+      <span class="logo-icon"><i class="fa-solid fa-dna"></i></span>
+      Style<span>DNA</span>
+    </div>
+
+    <ul class="nav-links">
+      <li class="nav-item"><a href="#" id="home-link">Home</a></li>
+      <li class="nav-item"><a href="#" id="shop-link">Shop Outfits</a></li>
+      <li class="nav-item"><a href="#" id="ai-recs-link">AI Lab</a></li>
+      <li class="nav-item"><a href="#" id="favourites-link">Favourites</a></li>
+    </ul>
+
+    <div class="nav-right">
+      <div class="user-status" id="userIdDisplay">Not Logged In</div>
+      <button id="style-quiz-btn" class="nav-pill" type="button">Style Quiz</button>
+      <div class="nav-icon-row">
+        <button class="nav-icon" type="button" title="Search (coming soon)"><i
+            class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="nav-icon badge" type="button" title="Cart (dummy)" data-count="0"><i
+            class="fa-solid fa-cart-shopping"></i></button>
+        <button class="nav-icon" type="button" title="Profile (dummy)"><i class="fa-regular fa-user"></i></button>
+      </div>
+      <button id="logoutBtn" class="logout-btn" style="display:none;">Logout</button>
+    </div>
+
+    <button class="nav-hamburger" id="nav-toggle" type="button" aria-label="Toggle navigation">
+      <span></span>
+    </button>
+  </nav>
+
+
+
+  <!-- ========== LANDING PAGE (Login / Signup entry) ========== -->
+  <main id="landing-page" class="page-view active">
+    <section class="hero hero-landing">
+      <div class="hero-overlay"></div>
+      <div class="hero-content animate-in">
+        <h1>Your AI-Powered Fashion Stylist</h1>
+        <p>Discover outfits tailored to your unique Style DNA.</p>
+        <div class="hero-btns">
+          <button class="cta-btn cta-primary" id="landing-signup-btn">Create Account</button>
+          <button class="cta-btn cta-secondary" id="landing-login-btn">Log In</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="login-section" class="container auth-container" style="display: none;">
+      <h2>Welcome Back</h2>
+      <form id="loginForm" class="auth-form-single">
+        <input type="email" id="login-email" placeholder="Email Address" required>
+        <input type="password" id="login-password" placeholder="Password" required>
+        <button type="submit" class="primary-btn">Log In</button>
+      </form>
+      <p class="auth-switch">New here? <button type="button" class="link-btn" id="switch-to-signup">Sign up</button></p>
+    </section>
+  </main>
+
+  <!-- ========== ONBOARDING WIZARD (one question per page) ========== -->
+  <main id="onboard-page" class="page-view" style="display: none;">
+    <div class="onboard-progress">
+      <div class="progress-bar" id="onboard-progress-bar"></div>
+      <span class="progress-text" id="onboard-progress-text">Step 1 of 5</span>
+    </div>
+
+    <!-- Step 1: Account -->
+    <section class="onboard-step" id="onboard-step-1" data-step="1">
+      <div class="onboard-visual">
+        <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=800&q=80"
+          alt="Create your style profile">
+      </div>
+      <div class="onboard-form-wrap">
+        <h2>Create Your Account</h2>
+        <p class="onboard-desc">Start your style journey with a few details.</p>
+        <form id="onboardAccountForm" class="onboard-form">
+          <input type="text" id="onboard-name" placeholder="Full Name" required>
+          <input type="email" id="onboard-email" placeholder="Email Address" required>
+          <input type="password" id="onboard-password" placeholder="Password" required>
+          <button type="submit" class="primary-btn">Continue</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Step 2: Favorite Colors -->
+    <section class="onboard-step" id="onboard-step-2" data-step="2" style="display: none;">
+      <div class="onboard-visual">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80"
+          alt="Your favorite colors">
+      </div>
+      <div class="onboard-form-wrap">
+        <h2>Your Favorite Colors</h2>
+        <p class="onboard-desc">Tell us the colors you love to wear (e.g. black, navy, white).</p>
+        <form id="onboardColorsForm" class="onboard-form">
+          <input type="text" id="onboard-colors" placeholder="e.g. black, navy, burgundy" required>
+          <div class="onboard-actions">
+            <button type="button" class="secondary-btn" id="onboard-back-2">Back</button>
+            <button type="submit" class="primary-btn">Continue</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Step 3: Preferred Fit -->
+    <section class="onboard-step" id="onboard-step-3" data-step="3" style="display: none;">
+      <div class="onboard-visual">
+        <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=800&q=80"
+          alt="Fit and silhouette">
+      </div>
+      <div class="onboard-form-wrap">
+        <h2>Preferred Fit</h2>
+        <p class="onboard-desc">How do you like your clothes to fit?</p>
+        <form id="onboardFitForm" class="onboard-form">
+          <select id="onboard-fit" required>
+            <option value="">Choose your fit</option>
+            <option value="slim">Slim</option>
+            <option value="regular">Regular</option>
+            <option value="oversized">Oversized</option>
+            <option value="relaxed">Relaxed</option>
+          </select>
+          <div class="onboard-actions">
+            <button type="button" class="secondary-btn" id="onboard-back-3">Back</button>
+            <button type="submit" class="primary-btn">Continue</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Step 4: Budget -->
+    <section class="onboard-step" id="onboard-step-4" data-step="4" style="display: none;">
+      <div class="onboard-visual">
+        <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&w=800&q=80"
+          alt="Your budget zone">
+      </div>
+      <div class="onboard-form-wrap">
+        <h2>Budget Zone</h2>
+        <p class="onboard-desc">We'll recommend pieces in your comfort range.</p>
+        <form id="onboardBudgetForm" class="onboard-form">
+          <select id="onboard-budget" required>
+            <option value="">Select budget</option>
+            <option value="low">Budget-Friendly</option>
+            <option value="medium">Mid-Range</option>
+            <option value="high">Premium</option>
+          </select>
+          <div class="onboard-actions">
+            <button type="button" class="secondary-btn" id="onboard-back-4">Back</button>
+            <button type="submit" class="primary-btn">Continue</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Step 5: Occasions -->
+    <section class="onboard-step" id="onboard-step-5" data-step="5" style="display: none;">
+      <div class="onboard-visual">
+        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800&q=80"
+          alt="Occasions you dress for">
+      </div>
+      <div class="onboard-form-wrap">
+        <h2>Occasions You Dress For</h2>
+        <p class="onboard-desc">e.g. formal, casual, party, work, vacation</p>
+        <form id="onboardOccasionsForm" class="onboard-form">
+          <input type="text" id="onboard-occasions" placeholder="e.g. formal, casual, party" required>
+          <div class="onboard-actions">
+            <button type="button" class="secondary-btn" id="onboard-back-5">Back</button>
+            <button type="submit" class="primary-btn">Generate My Style DNA</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========== HOME PAGE (Upload & Match - after login) ========== -->
+  <main id="home-page" class="page-view" style="display: none;">
+    <section class="hero hero-home">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1>Your Style Dashboard</h1>
+        <p>Manually catalog your wardrobe pieces and build perfect outfits.</p>
+      </div>
+    </section>
+
+    <section id="upload-section" class="container studio-section">
+      <div class="studio-header">
+        <div class="studio-icon"><i class="fa-solid fa-dna"></i></div>
+        <div>
+          <h2>Style Studio</h2>
+          <p class="studio-subtitle">Curate your wardrobe with precision and style</p>
+        </div>
+      </div>
+      <div class="studio-badges">
+        <span class="studio-badge primary">
+          <span class="badge-icon"><i class="fa-solid fa-layer-group"></i></span>Manual Cataloging
+        </span>
+        <span class="studio-badge secondary">
+          <span class="badge-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>Premium Matching
+        </span>
+      </div>
+
+      <form id="uploadForm" class="studio-form">
+        <div class="form-section">
+          <div class="section-header">
+            <div class="section-icon"><i class="fa-solid fa-user-tie"></i></div>
+            <div>
+              <h3>Garment Details</h3>
+              <p class="section-subtitle">Tell us about your item for perfect matches</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="item-name">Item Name</label>
+              <input type="text" id="item-name" placeholder="e.g., Classic Denim Jacket" required>
+            </div>
+            <div class="form-group">
+              <label for="item-category">Category</label>
+              <select id="item-category" required>
+                <option value="">Select category</option>
+                <option value="tops">Tops</option>
+                <option value="bottoms">Bottoms</option>
+                <option value="outerwear">Outerwear</option>
+                <option value="dresses">Dresses</option>
+                <option value="shoes">Shoes</option>
+                <option value="accessories">Accessories</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="item-color">Primary Color</label>
+              <input type="text" id="item-color" placeholder="e.g., Navy Blue" required>
+            </div>
+            <div class="form-group">
+              <label for="item-brand">Brand (Optional)</label>
+              <input type="text" id="item-brand" placeholder="e.g., Zara">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-header">
+            <div class="section-icon"><i class="fa-solid fa-palette"></i></div>
+            <div>
+              <h3>Style Characteristics</h3>
+              <p class="section-subtitle">Help us understand your item's personality</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="item-fit">Fit</label>
+              <select id="item-fit">
+                <option value="">Select fit</option>
+                <option value="slim">Slim Fit</option>
+                <option value="regular">Regular Fit</option>
+                <option value="relaxed">Relaxed Fit</option>
+                <option value="oversized">Oversized</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="item-occasion">Best For</label>
+              <select id="item-occasion">
+                <option value="">Select occasion</option>
+                <option value="casual">Casual</option>
+                <option value="business">Business</option>
+                <option value="formal">Formal</option>
+                <option value="party">Party</option>
+              </select>
+            </div>
+            <div class="form-group full-width">
+              <label for="item-notes">Additional Notes</label>
+              <textarea id="item-notes" rows="3" placeholder="Any special details about this item..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary">Save Draft</button>
+          <button type="submit" class="btn-primary">
+            <span>Add to Wardrobe</span>
+            <span class="btn-arrow">→</span>
+          </button>
+        </div>
+
+        <div class="form-tips">
+          <div class="tips-icon"><i class="fa-solid fa-lightbulb"></i></div>
+          <p>Pro tip: The more details you provide, the better your outfit recommendations will be.</p>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- ========== AI LAB PAGE ========== -->
+  <main id="ai-recs-page" class="page-view" style="display: none;">
+    <section class="container ai-lab-container">
+      <header class="ai-lab-header">
+        <h2>AI Style Intelligence</h2>
+        <p>Our neural network analyzes your garment's silhouette, textile patterns, and tonal palette to curate a
+          bespoke collection from our boutique.</p>
+
+        <div class="ai-lab-metrics-row">
+          <div class="ai-lab-metric">
+            <span class="ai-lab-metric-dot" id="aiLabMetricDot"></span>
+            <span id="aiLabMetricStatus">System Ready</span>
+          </div>
+          <div class="ai-lab-metric">
+            <span>Last Insight:</span>
+            <span id="aiLabMetricLastRun">None</span>
+          </div>
+          <div class="ai-lab-metric">
+            <span>Neural Match:</span>
+            <span id="aiLabMetricBestMatch">—</span>
+          </div>
+        </div>
+      </header>
+
+      <div id="aiLabUploadView">
+
+        <section class="ai-lab-grid">
+          <div class="ai-lab-left">
+            <div class="file-drop ai-drop ai-lab-drop" id="aiLabDropZone">
+              <input type="file" id="aiLabPhoto" accept="image/*" required>
+              <div class="drop-inner">
+                <div class="drop-icon" aria-hidden="true" style="font-size: 40px; margin-bottom: 10px;"><i
+                    class="fa-solid fa-cloud-arrow-up"></i></div>
+                <div class="drop-title" style="font-size: 18px; font-weight: 700;">Upload Style Asset</div>
+                <div class="drop-sub" style="font-size: 13px; opacity: 0.7;">Drag and drop or click to select photo
+                </div>
+                <div class="drop-pills" style="margin-top: 20px;">
+                  <span class="drop-pill" style="background: var(--secondary); color: white;">
+                    <span class="pill-icon"><i class="fa-solid fa-eye"></i></span>Computer Vision
+                  </span>
+                  <span class="drop-pill" style="border: 1px solid var(--secondary);">
+                    <span class="pill-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>DNA Match
+                  </span>
+                </div>
+              </div>
+              <div class="upload-preview" id="aiLabPreview">
+                <img src="" alt="Preview" id="aiLabPreviewImg">
+                <div class="upload-preview-caption" id="aiLabPreviewCaption">Asset Preview</div>
+              </div>
+            </div>
+
+            <div class="ai-status-panel" id="aiLabStatus">
+              <div class="ai-status-title">Process Status</div>
+              <div class="ai-status-text">Awaiting input...</div>
+            </div>
+          </div>
+
+          <div class="ai-lab-right">
+            <div class="ai-lab-analysis-card">
+              <h3>Style Analysis</h3>
+              <p>
+                Upload a high-fidelity image of a single clothing item. For optimal results, ensure neutral lighting and
+                a
+                clean background.
+              </p>
+              <button type="button" class="primary-btn ai-lab-run-btn" id="aiLabRunBtn">
+                Analyze Style
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </div> <!-- End aiLabUploadView-->
+
+      <section id="aiLabResults" class="recs-hidden" style="display: none;">
+        <div class="ai-lab-results-header">
+          <div class="results-header-left">
+            <button type="button" id="aiLabBackBtn" class="back-btn">
+              <i class="fa-solid fa-arrow-left"></i> Analyze Another Image
+            </button>
+            <h3>Style Analysis Results</h3>
+          </div>
+          <div class="ai-lab-results-meta" id="aiLabResultsMeta">Pending execution</div>
+        </div>
+
+        <div id="aiLabAnalyzedCard" class="ai-analyzed-card" style="display:none;"></div>
+
+        <!-- NEW: Verification Action Area -->
+        <div id="aiLabConfirmationAction" class="ai-lab-confirmation-action" style="display:none;">
+          <div class="confirmation-content">
+            <h4>Ready to find matches?</h4>
+            <p>If the AI got it right, click below to search the boutique for curated outfits.</p>
+            <div class="confirmation-btns">
+              <button type="button" class="primary-btn ai-lab-run-btn" id="aiLabConfirmBtn">
+                Confirm & Find Matches <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="aiLabOutfitSection" class="outfit-curation-section" style="display:none;">
+          <h3>Recommended Outfits</h3>
+          <div id="aiLabLoadingState" class="ai-lab-recs-loading" style="display:none;">
+            <div class="spinner"></div>
+            <p>Curating your bespoke matches...</p>
+          </div>
+          <div id="aiLabRecs" class="recs-grid ai-lab-recs-grid">
+            <p class="empty-state ai-lab-recs-empty">Upload an image to generate personalized outfit recommendations.
+            </p>
+          </div>
+          <div id="aiLabOutfitSummary" class="ai-lab-outfit-summary"></div>
+        </div>
+
+        <div class="ai-raw-toggle-row">
+          <button type="button" id="aiLabRawToggle" class="ai-raw-toggle-btn">Toggle Technical Metadata</button>
+        </div>
+        <pre id="aiLabRawResponse" class="ai-raw-response"></pre>
+      </section>
+    </section>
+  </main>
+
+  <!-- ========== SHOP PAGE ========== -->
+  <main id="shop-page" class="page-view" style="display: none;">
+    <div class="nav-secondary-strip">
+      <div class="nav-secondary-chip">
+        <span class="chip-icon"><i class="fa-solid fa-fire"></i></span>New Arrivals
+      </div>
+      <div class="nav-secondary-chip">
+        <span class="chip-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>DNA Picks
+      </div>
+      <div class="nav-secondary-chip">
+        <span class="chip-icon"><i class="fa-solid fa-briefcase"></i></span>Workwear
+      </div>
+      <div class="nav-secondary-chip">
+        <span class="chip-icon"><i class="fa-solid fa-glass-cheers"></i></span>Party Edit
+      </div>
+      <div class="nav-secondary-chip">
+        <span class="chip-icon"><i class="fa-regular fa-circle"></i></span>Minimal Basics
+      </div>
+      <div class="nav-secondary-chip">
+        <span class="chip-icon"><i class="fa-solid fa-road"></i></span>Street Style
+      </div>
+      <div class="nav-secondary-chip">
+        <span class="chip-icon"><i class="fa-solid fa-shirt"></i></span>Occasionwear
+      </div>
+    </div>
+    <section id="recommendations-section" class="container recs-hidden" style="display: none;">
+      <h2>Your Personalized Recommendations</h2>
+      <div id="aiAnalyzedCard" class="ai-analyzed-card" style="display: none;"></div>
+      <div id="recsDisplay" class="recs-grid">
+        <p class="empty-state">Select an item below to see AI outfit recommendations!</p>
+      </div>
+      <div id="outfitDisplay" class="outfit-summary"></div>
+    </section>
+
+    <section id="products-section" class="container shop-container">
+      <div class="shop-layout">
+        <aside class="filters-sidebar">
+          <h3>Filters</h3>
+          <div class="filter-chips-row">
+            <button type="button" class="filter-chip" id="chip-new">New in</button>
+            <button type="button" class="filter-chip" id="chip-trending">Trending</button>
+            <button type="button" class="filter-chip" id="chip-budget">Under ₹999</button>
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">Gender</span>
+            <select id="filter-gender" class="filter-select">
+              <option value="">All</option>
+              <option value="women">Women</option>
+              <option value="men">Men</option>
+              <option value="unisex">Unisex</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">Color</span>
+            <select id="filter-color" class="filter-select">
+              <option value="">All</option>
+              <option value="black">Black</option>
+              <option value="white">White</option>
+              <option value="navy">Navy</option>
+              <option value="pink">Pink</option>
+              <option value="maroon">Maroon</option>
+              <option value="brown">Brown</option>
+              <option value="grey">Grey</option>
+              <option value="green">Green</option>
+              <option value="beige">Beige</option>
+              <option value="purple">Purple</option>
+            </select>
+            <div class="color-swatches">
+              <button type="button" class="color-swatch swatch-black" data-color="black" title="Black"></button>
+              <button type="button" class="color-swatch swatch-white" data-color="white" title="White"></button>
+              <button type="button" class="color-swatch swatch-navy" data-color="navy" title="Navy"></button>
+              <button type="button" class="color-swatch swatch-pink" data-color="pink" title="Pink"></button>
+              <button type="button" class="color-swatch swatch-maroon" data-color="maroon" title="Maroon"></button>
+              <button type="button" class="color-swatch swatch-brown" data-color="brown" title="Brown"></button>
+              <button type="button" class="color-swatch swatch-grey" data-color="grey" title="Grey"></button>
+              <button type="button" class="color-swatch swatch-green" data-color="green" title="Green"></button>
+              <button type="button" class="color-swatch swatch-beige" data-color="beige" title="Beige"></button>
+              <button type="button" class="color-swatch swatch-purple" data-color="purple" title="Purple"></button>
+            </div>
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">Occasion</span>
+            <select id="filter-occasion" class="filter-select">
+              <option value="">All</option>
+              <option value="casual">Casual</option>
+              <option value="festive">Festive</option>
+              <option value="formal">Formal</option>
+              <option value="party">Party</option>
+              <option value="winter">Winter</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">Price</span>
+            <select id="filter-price" class="filter-select">
+              <option value="">All</option>
+              <option value="lt500">Under ₹500</option>
+              <option value="500-1000">₹500 - ₹1000</option>
+              <option value="1000-2000">₹1000 - ₹2000</option>
+              <option value="gt2000">Above ₹2000</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">Special</span>
+            <label
+              style="font-size: 12px; color: var(--text-light); display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" id="filter-trending" style="width:auto;">
+              Show only trending
+            </label>
+          </div>
+          <div class="filters-footer">
+            <button type="button" class="filters-clear-btn" id="filters-clear">Clear all</button>
+            <div class="filters-meta" id="filters-meta">Showing all items</div>
+          </div>
+        </aside>
+        <div class="products-area">
+          <div class="products-header">
+            <div class="products-header-main">
+              <h2>Trending Collection</h2>
+              <p class="products-subtitle">Curated looks based on your Style DNA</p>
+            </div>
+            <div class="products-controls">
+              <select id="sort-products" class="sort-select">
+                <option value="">Sort: Featured</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="newest">Newest First</option>
+              </select>
+              <input type="text" id="product-search" class="search-input"
+                placeholder="Search by name, category, color..." />
+            </div>
+          </div>
+          <div id="productsGrid" class="products-grid"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========== FAVOURITES PAGE ========== -->
+  <main id="favourites-page" class="page-view" style="display: none;">
+    <section id="favourites-section" class="container">
+      <h2>Your Favourites</h2>
+      <div id="favouritesGrid" class="products-grid"></div>
+    </section>
+  </main>
+
+  <script src="js/app.js"></script>
+  <script src="js/ai-recs.js"></script>
+</body>
+
+</html>
